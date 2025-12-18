@@ -1,0 +1,25 @@
+﻿/* header */
+/* 폰트는 최상단 html에서 관리 */
+
+footer {
+    height: auto;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+footer * {
+    font-family: inherit;
+    font-weight: bold;
+    color : inherit;
+    background-color: inherit;
+}
+.footer-content {
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+    .footer-content p {
+        margin: 3px 0;
+    }

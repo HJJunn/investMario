@@ -1,0 +1,143 @@
+/* src/styles/dashboard/ProfileModal.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* 뒷배경 어둡게 */
+    backdrop-filter: blur(5px); /* 뒷배경 블러 효과 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* 헤더보다 위에 오도록 */
+}
+
+.modal-container {
+    width: 800px;
+    height: 500px;
+    background-color: var(--trade-card-bg, #1e222d); /* 기본값 지정 */
+    border: 1px solid var(--trade-border, #2a2e39);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 200px 1fr; /* 좌측 메뉴 200px, 나머지 콘텐츠 */
+    overflow: hidden;
+    color: var(--trade-text, #d1d4dc);
+    font-family: 'Inter', sans-serif;
+}
+
+/* 좌측 사이드바 메뉴 */
+.modal-sidebar {
+    background-color: var(--trade-bg, #131722);
+    border-right: 1px solid var(--trade-border, #2a2e39);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--trade-subtext, #888);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-item:hover {
+    background-color: var(--trade-hover, #2a2e39);
+    color: var(--trade-text, #fff);
+}
+
+.sidebar-item.active {
+    background-color: rgba(41, 98, 255, 0.1);
+    color: #2962ff;
+    border-right: 3px solid #2962ff;
+    font-weight: bold;
+}
+
+/* 우측 콘텐츠 영역 */
+.modal-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--trade-subtext, #888);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close-btn:hover { color: #f23645; }
+
+.content-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--trade-border, #2a2e39);
+}
+
+/* 프로필 카드 스타일 */
+.profile-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.profile-info h3 { margin: 0 0 5px 0; font-size: 1.2rem; }
+.profile-info p { margin: 0; color: var(--trade-subtext, #888); font-size: 0.9rem; }
+
+.badge-master {
+    background-color: rgba(213, 0, 249, 0.1);
+    color: #d500f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* 정보 그리드 */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.info-box {
+    background-color: var(--trade-bg, #131722);
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid var(--trade-border, #2a2e39);
+}
+
+.info-label { display: block; font-size: 0.8rem; color: var(--trade-subtext, #888); margin-bottom: 5px; }
+.info-value { display: block; font-size: 1rem; font-weight: 500; }

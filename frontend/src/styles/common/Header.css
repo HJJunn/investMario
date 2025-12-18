@@ -1,0 +1,390 @@
+/* src/styles/common/Header.css */
+
+.custom-header-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+    box-sizing: border-box;
+}
+
+.mario-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.text-red { color: #ff4444; text-shadow: 0 0 10px rgba(255, 68, 68, 0.5); }
+.text-blue { color: #4444ff; text-shadow: 0 0 10px rgba(68, 68, 255, 0.5); }
+
+.mario-icon-placeholder {
+    width: 35px;
+    height: 35px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 2px solid white;
+}
+
+.mario-img {
+    height: 40px;
+    width: auto;
+}
+
+.header-utils {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #d1d4dc;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.login-btn {
+    background-color: #2962ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #1e4bd1;
+}
+
+/* 사용자 정보 바 스타일 */
+.user-info-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 15px;
+    font-size: 0.9rem;
+    color: var(--trade-text); /* trade.css의 변수 활용 */
+}
+
+.info-item {
+    display: flex;
+    gap: 5px;
+}
+.info-item .label { color: #888; }
+.info-item .value { font-weight: bold; }
+
+/* 등급 배지 스타일 */
+.badge-gold { color: #ffd700; text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+.badge-master { 
+    color: #d500f9; 
+    text-shadow: 0 0 5px rgba(213, 0, 249, 0.4); 
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.divider {
+    width: 1px;
+    height: 14px;
+    background-color: #444;
+    margin: 0 5px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--trade-text); /* trade.css 변수 사용 */
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.icon-btn-small {
+    background: none;
+    border: none;
+    color: var(--trade-text);
+    cursor: pointer;
+    font-size: 1rem; /* 아이콘 크기 살짝 키움 */
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+.icon-btn-small:hover { opacity: 0.8; }
+
+.login-btn {
+    background-color: #2962ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.login-btn:hover { background-color: #1e4bd1; }
+
+.logout-btn {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+.logout-btn:hover { background-color: #666; }
+
+.leverage-btn {
+    background-color: rgba(41, 98, 255, 0.15); /* 연한 파랑 배경 */
+    color: #2962ff;
+    border: 1px solid rgba(41, 98, 255, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.leverage-btn:hover {
+    background-color: #2962ff;
+    color: white;
+}
+
+/* ★ 레버리지 슬라이더 팝업창 */
+.leverage-popup {
+    position: absolute;
+    top: 30px; /* 버튼 바로 아래 */
+    left: 50%;
+    transform: translateX(-50%); /* 가운데 정렬 */
+    width: 200px;
+    background-color: var(--trade-card-bg, #1e222d);
+    border: 1px solid var(--trade-border, #2a2e39);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lev-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--trade-subtext, #888);
+    font-weight: bold;
+}
+.lev-val {
+    color: #2962ff;
+    font-size: 0.9rem;
+}
+
+/* 슬라이더(Range) 커스텀 */
+.lev-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+.lev-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #2962ff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.lev-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.lev-marks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #666;
+}
+
+.lev-close {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--trade-subtext, #888);
+    cursor: pointer;
+    margin-top: 5px;
+    border-top: 1px solid var(--trade-border, #333);
+    padding-top: 5px;
+}
+.lev-close:hover { color: var(--trade-text, #fff); }
+
+/* ★ [2] 성향 버튼 (신규) */
+.tendency-btn {
+    background: transparent;
+    border: 1px solid var(--trade-border, #444);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 800; /* 굵게 */
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 60px;
+}
+.tendency-btn:hover {
+    background-color: var(--trade-hover, #2a2e39);
+}
+
+/* 성향별 텍스트 색상 (이미 정의되어 있을 수 있음) */
+.text-red { color: #f23645 !important; text-shadow: 0 0 5px rgba(242, 54, 69, 0.3); }
+.text-green { color: #089981 !important; text-shadow: 0 0 5px rgba(8, 153, 129, 0.3); }
+.text-yellow { color: #ff9800 !important; text-shadow: 0 0 5px rgba(255, 152, 0, 0.3); }
+
+/* [3] 공통 팝업 스타일 (레버리지 & 성향) */
+.leverage-popup, .tendency-popup {
+    position: absolute;
+    top: 35px; /* 버튼 아래 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    background-color: var(--trade-card-bg, #1e222d);
+    border: 1px solid var(--trade-border, #2a2e39);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* 성향 팝업은 너비를 조금 줄임 */
+.tendency-popup { width: 100px; }
+
+/* 성향 옵션 아이템 */
+.tendency-option {
+    padding: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--trade-text);
+}
+.tendency-option:hover {
+    background-color: var(--trade-hover, #2a2e39);
+}
+.tendency-option.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+}
+
+/* 팝업 닫기 버튼 공통 */
+.popup-close {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--trade-subtext, #888);
+    cursor: pointer;
+    margin-top: 5px;
+    border-top: 1px solid var(--trade-border, #333);
+    padding-top: 5px;
+}
+.popup-close:hover { color: var(--trade-text); }
+
+.popup-confirm-btn {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #fff;
+    background-color: #2962ff; /* 파란색 배경 */
+    cursor: pointer;
+    margin-top: 8px;
+    padding: 6px 0;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.popup-confirm-btn:hover {
+    background-color: #1e4bd1;
+}
+
+/* ★ 2. 포지션 변경 확인 팝업 (Overlay) */
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* 최상위 레벨 */
+}
+
+.confirm-box {
+    background-color: var(--trade-card-bg, #1e222d);
+    border: 1px solid var(--trade-border, #2a2e39);
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-align: center;
+    min-width: 250px;
+    animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.confirm-msg {
+    color: var(--trade-text, #fff);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.confirm-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-yes {
+    background-color: #2962ff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-yes:hover { background-color: #1e4bd1; }
+
+.btn-no {
+    background-color: transparent;
+    color: var(--trade-subtext, #888);
+    border: 1px solid var(--trade-border, #444);
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-no:hover {
+    color: var(--trade-text, #fff);
+    border-color: var(--trade-text, #fff);
+}

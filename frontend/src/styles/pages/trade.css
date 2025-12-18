@@ -1,0 +1,205 @@
+﻿/* src/styles/pages/trade.css */
+
+/* 1. 색상 변수 */
+:root {
+    --trade-bg: #f5f5f5;           
+    --trade-card-bg: #ffffff;      
+    --trade-text: #333333;         
+    --trade-border: #e0e0e0;       
+    --trade-subtext: #666666;      
+    --trade-hover: #f0f0f0;        
+}
+
+body.dark-mode {
+    --trade-bg: #131722;           
+    --trade-card-bg: #1e222d;      
+    --trade-text: #d1d4dc;         
+    --trade-border: #2a2e39;       
+    --trade-subtext: #888888;      
+    --trade-hover: #2a2e39;        
+}
+
+/* 2. 전체 레이아웃 */
+.trade-container {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--trade-bg);
+    color: var(--trade-text);
+    grid-template-rows: 60px 240px 1fr auto; 
+    grid-template-areas: 
+        "header"
+        "top-stats"
+        "main-content"
+        "footer";
+    overflow: hidden;
+}
+
+.area-header { 
+    grid-area: header; 
+    border-bottom: 1px solid var(--trade-border); 
+    background-color: var(--trade-card-bg);
+}
+
+.area-top-stats { 
+    grid-area: top-stats; 
+    padding: 5px 10px; 
+    background-color: var(--trade-bg);
+    overflow: hidden; 
+}
+
+.area-footer { 
+    grid-area: footer; 
+    background: var(--trade-card-bg); 
+    border-top: 1px solid var(--trade-border); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 0.7rem; 
+    color: var(--trade-subtext);
+    padding: 10px 0;
+    white-space: normal;
+    text-align: center;
+}
+
+/* 3. 메인 콘텐츠 (2:1 비율) */
+.area-main {
+    grid-area: main-content;
+    display: grid;
+    grid-template-columns: 1fr 600px; 
+    gap: 10px;
+    padding: 0 10px 15px 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.chart-box, .side-panel-box {
+    background-color: var(--trade-card-bg);
+    border: 1px solid var(--trade-border);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;       
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* 4. 챗봇 모드 */
+.chat-mode-container { display: flex; flex-direction: column; height: 100%; }
+.chat-content-area { flex: 1; overflow: hidden; position: relative; }
+.panel-title {
+    padding: 10px; font-size: 0.9rem; font-weight: bold;
+    border-bottom: 1px solid var(--trade-border);
+    background-color: var(--trade-card-bg); color: var(--trade-text);
+}
+
+/* 5. 리스트 스타일 */
+.list-header-search {
+    background-color: var(--trade-card-bg);
+    padding: 10px;
+    border-bottom: 1px solid var(--trade-border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.search-tabs { display: flex; gap: 10px; }
+.s-tab {
+    background: none; border: none; color: var(--trade-subtext);
+    font-size: 0.85rem; font-weight: bold; cursor: pointer;
+    padding-bottom: 2px; border-bottom: 2px solid transparent; transition: all 0.2s;
+}
+.s-tab:hover { color: var(--trade-text); }
+.s-tab.active { color: #2962ff; border-bottom: 2px solid #2962ff; }
+
+.search-input-wrapper { position: relative; width: 100%; }
+.search-icon { 
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%); 
+    color: var(--trade-subtext); font-size: 0.8rem; 
+}
+.coin-search-input {
+    width: 100%; padding: 8px 10px 8px 30px;
+    border: 1px solid var(--trade-border); border-radius: 4px;
+    background-color: var(--trade-bg); color: var(--trade-text);
+    font-size: 0.85rem; outline: none;
+}
+.coin-search-input:focus { border-color: #2962ff; }
+
+/* 컬럼 라벨 (헤더) */
+.column-labels {
+    display: grid; 
+    grid-template-columns: 1.4fr 1fr 0.8fr 1.2fr; 
+    padding: 8px 10px;
+    font-size: 0.7rem; color: var(--trade-subtext); font-weight: bold;
+    background-color: var(--trade-bg); border-bottom: 1px solid var(--trade-border);
+    text-align: center; /* 기본은 가운데 정렬 */
+}
+
+/* ★ 수정: 첫 번째 컬럼(코인명)만 왼쪽 정렬 + 들여쓰기 */
+.column-labels span:first-child {
+    text-align: left;
+    padding-left: 5px;
+}
+
+.list-content { overflow-y: auto; flex: 1; }
+
+/* 리스트 행 */
+.list-row {
+    display: grid; 
+    grid-template-columns: 1.4fr 1fr 0.8fr 1.2fr; 
+    padding: 8px 10px;
+    font-size: 0.85rem; border-bottom: 1px solid var(--trade-border);
+    align-items: center; cursor: pointer; transition: background 0.2s;
+    color: var(--trade-text);
+    text-align: center; /* 기본은 가운데 정렬 */
+}
+.list-row:hover { background-color: var(--trade-hover); }
+
+/* 심볼 컬럼 (코인명) */
+.symbol-col { 
+    display: flex; align-items: center; gap: 6px; 
+    overflow: hidden; white-space: nowrap; 
+    
+    /* ★ 수정: 왼쪽 정렬 (flex-start) */
+    justify-content: flex-start;
+    padding-left: 5px;
+}
+.coin-name { font-weight: bold; }
+.coin-pair { font-size: 0.7rem; color: var(--trade-subtext); margin-top: 2px;}
+
+.fav-star { font-size: 1rem; color: var(--trade-subtext); cursor: pointer; margin-right: 2px; }
+.fav-star:hover { color: #ffd700; }
+.fav-star.active { color: #ffd700; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+
+.empty-msg { padding: 30px 10px; text-align: center; font-size: 0.8rem; color: var(--trade-subtext); }
+
+.text-up { color: #089981; }
+.text-down { color: #f23645; }
+.badge { padding: 2px 4px; border-radius: 2px; }
+.bg-up { background-color: rgba(8, 153, 129, 0.2); color: #089981; }
+.bg-down { background-color: rgba(242, 54, 69, 0.2); color: #f23645; }
+
+/* 6. 플로팅 버튼 */
+.chat-float-btn {
+    position: fixed;
+    bottom: 50px; 
+    right: 20px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background-color: #2962ff; 
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(41, 98, 255, 0.4);
+    z-index: 1000;
+    display: flex; justify-content: center; align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+.chat-float-btn:hover { background-color: #1e4bd1; transform: scale(1.1) translateY(-2px); }
+.chat-float-btn:active { transform: scale(0.95); }
+
+/* 스크롤바 */
+body.dark-mode ::-webkit-scrollbar { width: 5px; }
+body.dark-mode ::-webkit-scrollbar-track { background: #131722; }
+body.dark-mode ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }

@@ -1,0 +1,253 @@
+﻿.chart-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+/* 차트 헤더 부분 */
+.chart {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.chart-Ticker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap:10px;
+}
+
+.chart-Ticker img {
+    width: 50px;
+    height: 50px;
+}
+
+.chart-button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.chart-header-select {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+/* 북 마크 버튼 */
+.bookBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  padding: 4px;
+}
+
+.bookBtn i {
+  color: gold; /* 빈 별/꽉찬 별 모두 같은 색 유지 */
+  transition: 0.2s;
+}
+
+
+.chart-button-container button {
+    width: 40px;
+    background-color: inherit;
+    border: 0.3px solid black;
+    cursor: pointer;
+}
+
+
+/* 오더 북 부분 */
+.order-book-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 추천 리스트 위쪽에 붙도록 */
+    align-items: stretch;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: relative; /* 중요! 추천 리스트 절대 위치 기준 */
+}
+
+
+
+/* 검색창 */
+.ticker-search {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+    color: black;
+}
+
+
+/* 검색창 포커스 */
+.ticker-search:focus {
+    border-color: #26a69a;
+    box-shadow: 0 0 5px rgba(38, 166, 154, 0.5);
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ticker-suggestions {
+  position: absolute;
+  top: 100%;  /* 검색창 바로 아래 */
+  left: 0;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  z-index: 1000;
+}
+
+/* 추천 아이템 */
+.suggestion-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: black;
+}
+
+/* 추천 아이템 hover */
+.suggestion-item:hover {
+    background-color: #26a69a;
+    color: #fff;
+}
+
+/* OrderBook 스타일 */
+.order-book-inner-vertical {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+}
+
+.order-book-asks, .order-book-bids {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.order-book-asks h4,
+.order-book-bids h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.85em;
+    color: #fff;
+}
+
+.order-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+    border-radius: 4px;
+    margin: 1px 0;
+    font-weight: bold;
+}
+
+.order-row.ask {
+    background-color: #ef5350; 
+    color: #fff;
+}
+
+.order-row.bid {
+    background-color: #26a69a; 
+    color: #fff;
+}
+
+.order-row .price,
+.order-row .qty {
+    display: inline-block;
+}
+
+
+@media (max-width: 768px) {
+    .chart-container {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 10px;
+    }
+
+
+    /* 차트 헤더 부분 */
+    .chart {
+        display: flex;
+        flex-direction: column;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        
+    }
+
+    .chart-Ticker {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: start;
+        gap:10px;
+        font-size: 0.6em;
+    }
+
+
+    .chart-Ticker img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .chart-button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 2px;
+             
+    }
+
+    .chart-header-select {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    /* 북 마크 버튼 */
+    .bookBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 4px;
+    }
+
+    .bookBtn i {
+    color: gold; /* 빈 별/꽉찬 별 모두 같은 색 유지 */
+    transition: 0.2s;
+    }
+
+
+    .chart-button-container button {
+        width: 40px;
+        background-color: inherit;
+        border: 0.3px solid black;
+        cursor: pointer;
+    }
+    }
+
+/* 이 이하 차트 렌더링이 안됨 */
+@media (max-width: 350px) {
+    .coin-candle-chart{
+        display: none;
+    }
+}
