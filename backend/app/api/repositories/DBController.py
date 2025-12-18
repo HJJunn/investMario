@@ -8,7 +8,7 @@ fernet_key = os.getenv("FERNET_KEY").encode()
 cipher = Fernet(fernet_key)
 
 class DBController():
-    def __init__(self, payload, data):
+    def __init__(self, payload, data=None):
         self.userid = payload['sub']
         self.username = payload['name']
         self.email = payload['email']
@@ -79,6 +79,32 @@ class DBController():
                         "secret" : ""
                     }
                 },         
+            )
+
+            db.add(new_user)
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            print("무결성 오류 발생")            
+        except Exception as e:
+            db.rollback()
+            print(f"오류 발생: {e}")
+        finally:
+            db.close()
+
+        try:
+            new_user = TradingHistory(
+                userid = self.userid,
+                tradenumber = 0,
+                time = datetime.utcnow().isoformat(),
+                why = {},
+                position ={},
+                average ={},
+                available =0,
+                owner_coin ={},
+                total_asset = 0,
+                trade = {},
+                trade_fee = 0, 
             )
 
             db.add(new_user)
