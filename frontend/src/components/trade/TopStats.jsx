@@ -535,7 +535,7 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
                             <span>{hold.coin}</span>
                         </div>
                         <span style={{color:'var(--trade-text)'}}>{hold.amount}</span>
-                        <span style={{fontWeight:'bold'}}>{'\u20A9'} {hold.value}</span>
+                        <span style={{fontWeight:'bold'}}>{Number(hold.value).toLocaleString()}{'\u20A9'}</span>
                     </div>
                 ))}
             </div>
