@@ -404,7 +404,7 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
         // 보유코인 헤더
         holdHeader: {
             display: 'grid',
-            gridTemplateColumns: '0.9fr 0.9fr 1fr 1.2fr', 
+            gridTemplateColumns: '0.9fr 0.9fr 1.2fr', 
             padding: '6px 0', fontSize: '0.65rem', fontWeight: 'bold',
             backgroundColor: 'var(--trade-bg)', borderBottom: '1px solid var(--trade-border)',
             color: 'var(--trade-subtext)', textAlign: 'center', 
@@ -504,11 +504,11 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
                             <span>{pos.coin}</span>
                         </div>
                         <div><span style={pos.type === '매수' ? styles.badgeLong : styles.badgeShort}>{pos.type}</span></div>
-                        <span style={{color:'var(--trade-subtext)'}}>{pos.entry}</span>
+                        <span style={{color:'var(--trade-subtext)'}}>$ {pos.entry}</span>
                         <span style={{color:'var(--trade-text)'}}>{pos.amount}</span>
                         <span style={pos.isWin ? styles.pnlWin : styles.pnlLose}>{pos.pnl}</span>
                         <span style={pos.isRealizedWin ? styles.pnlWin : styles.pnlLose}>{pos.realizedPnl}</span> 
-                        <span style={{color:'var(--trade-subtext)'}}>{pos.liquidationPrice}</span> 
+                        <span style={{color:'var(--trade-subtext)'}}>$ {pos.liquidationPrice}</span> 
                     </div>
                 ))}
             </div>
@@ -525,19 +525,17 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
             <div style={styles.holdHeader}>
                 <span>코인</span>
                 <span>수량</span>
-                <span>수익률</span>
                 <span>평가금</span>
             </div>
             <div style={{overflowY:'auto', flex:1}} className="custom-scroll">
                 {holdingData.map((hold, i) => (
-                    <div key={i} style={{...styles.tableRow, gridTemplateColumns: '0.9fr 0.9fr 1fr 1.2fr'}}>
+                    <div key={i} style={{...styles.tableRow, gridTemplateColumns: '0.9fr 0.9fr 1.2fr'}}>
                         <div style={styles.coinWrapper}>
                             <img src={coinIcons[hold.coin]} alt="" style={styles.coinIcon} />
                             <span>{hold.coin}</span>
                         </div>
                         <span style={{color:'var(--trade-text)'}}>{hold.amount}</span>
-                        <span style={hold.isWin ? styles.pnlWin : styles.pnlLose}>{hold.roe}</span>
-                        <span style={{fontWeight:'bold'}}>{hold.value}</span>
+                        <span style={{fontWeight:'bold'}}>{'\u20A9'} {hold.value}</span>
                     </div>
                 ))}
             </div>
