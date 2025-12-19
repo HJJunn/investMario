@@ -225,8 +225,8 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
             
             const coinDifference = {};
             Object.keys(current_owner_coin).forEach((key) => {
-            coinDifference[key] = 
-                (current_owner_coin[key] - pre_owner_coin[key])
+            coinDifference[key] =
+                Number((current_owner_coin[key] - pre_owner_coin[key]).toFixed(8));
             });
             setTrade_Coin(coinDifference);
         });
@@ -535,7 +535,22 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
                             <span>{hold.coin}</span>
                         </div>
                         <span style={{color:'var(--trade-text)'}}>{hold.amount}</span>
-                        <span style={{fontWeight:'bold'}}>{Number(hold.value).toLocaleString()}{'\u20A9'}</span>
+                        <div className='won'
+                        style={
+                            {
+                                
+                                fontWeight:'bold',
+                                display:'flex',
+                                flexDirection:'row',
+                                justifyContent:'space-between',
+                                paddingRight:'30px',
+                                paddingLeft:'30px'       
+                            }
+                            }>
+
+                            <div>{Number(hold.value).toLocaleString()}</div>
+                            <div>{'\u20A9'}</div>                            
+                        </div>
                     </div>
                 ))}
             </div>

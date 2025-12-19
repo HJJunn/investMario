@@ -20,3 +20,4 @@ langchain
 langchain-openai
 faiss-cpu
 sentence-transformers
+openai
