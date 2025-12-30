@@ -8,7 +8,8 @@ import { useState, useEffect } from 'react';
 export default function Header({ darkMode, setDarkMode, isLogin, verify, Username, user_information, wallet_data}) {
 
     const [showProfileModal, setShowProfileModal] = useState(false);
-        
+    
+    
 
     // [1] 레버리지 상태 (DB 대신 로컬 스토리지 사용)
     const [leverage, setLeverage] = useState(() => {
@@ -49,7 +50,6 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                         // 등급, 자금, 성향은 DB 데이터 사용
                         if (data) {
                             if (data.tier) setTier(data.tier);
-                            if (data.total_asset !== undefined) setCapital(wallet_data.available_cash);
                             if (data.play) setTendency(data.play);
                             
                             // 레버리지는 DB에서 가져오지 않고 로컬 변수(state) 유지
@@ -62,6 +62,11 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
             fetchUserData();
         }
     }, [verify]);
+
+    useEffect(() => {
+    if (wallet_data?.available_cash == null) return
+    setCapital(wallet_data.available_cash)
+    }, [wallet_data?.available_cash])
 
     // 성향별 색상 매핑
     const getTendencyColor = (t) => {
@@ -152,7 +157,7 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                 <div className="user-info-bar">
                     <div className="info-item">
                         <span className="label">자금:</span>
-                        <span className="value">${capital.toLocaleString()}</span>
+                        <span className="value">{capital.toLocaleString()} 원</span>
                     </div>
                     {/* [1] 포지션 성향 (레버리지) */}
                     <div className="info-item" style={{ 
