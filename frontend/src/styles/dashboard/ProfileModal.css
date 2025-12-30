@@ -141,3 +141,90 @@
 
 .info-label { display: block; font-size: 0.8rem; color: var(--trade-subtext, #888); margin-bottom: 5px; }
 .info-value { display: block; font-size: 1rem; font-weight: 500; }
+
+/* 계좌 정보(Wallet) 탭 스타일 */
+.scroll-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    max-height: 380px; /* 모달 높이에 맞춰 스크롤 생성 */
+    padding-right: 5px;
+}
+
+/* 스크롤바 커스텀 (크롬, 사파리 등) */
+.scroll-container::-webkit-scrollbar {
+    width: 4px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: var(--trade-border, #2a2e39);
+    border-radius: 2px;
+}
+
+.exchange-title {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: var(--trade-text, #d1d4dc);
+    font-weight: 600;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--trade-border, #2a2e39);
+    padding-bottom: 8px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--trade-subtext, #888);
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--trade-card-bg, #1e222d); /* 카드 배경색 활용 */
+    border: 1px solid var(--trade-border, #2a2e39);
+    border-radius: 4px;
+    color: var(--trade-text, #d1d4dc);
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    border-color: #2962ff;
+    box-shadow: 0 0 0 1px rgba(41, 98, 255, 0.2);
+}
+
+.form-input::placeholder {
+    color: #555;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #2962ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #1e4bd3;
+}

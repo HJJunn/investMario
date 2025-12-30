@@ -69,7 +69,7 @@ async function fetchBingXPositions(API_KEY, API_SECRET) {
 
     const config = {
         method: API_CONFIG.method,
-        url: `/api${url}`, 
+        url: `/bingx${url}`, 
         headers: {
             'X-BX-APIKEY': API_KEY,
         },
@@ -590,7 +590,7 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
                         </div>
                         
                         <div>
-                            <span style={trade.isBuy ? styles.badgeLong : styles.badgeShort}>{trade.type}</span>
+                            <span style={trade.type == "hold" ? styles.badgeLong : styles.badgeShort}>{trade.type}</span>
                         </div>
                         <span style={{color:'var(--trade-subtext)'}}>{trade.qty}</span>
                     </div>
