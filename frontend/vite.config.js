@@ -10,9 +10,15 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
+        target: 'http://127.0.0.1:8300',
+        changeOrigin: true,
+        // rewrite: (path) => path.replace(/^\/api/, ''), // /api를 제거하고 전달
+        secure: false,
+      },
+      '/bingx': {
         target: 'https://open-api.bingx.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''), // /api를 제거하고 전달
+        rewrite: (path) => path.replace(/^\/bingx/, ''), // /bingx를 지우고 요청
         secure: false,
       }
     },

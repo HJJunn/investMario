@@ -3,24 +3,64 @@
 import "../../styles/common/Header.css";
 import GoogleLogin from '../GoogleLogin/GoogleLogin.jsx';
 import ProfileModal from '../dashboard/ProfileModal.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Header({ darkMode, setDarkMode, isLogin, verify, Username }) {
     const [showProfileModal, setShowProfileModal] = useState(false);
      
-    // [1] 레버리지 상태
-    const [leverage, setLeverage] = useState(10); 
+    // [1] 레버리지 상태 (DB 대신 로컬 스토리지 사용)
+    const [leverage, setLeverage] = useState(() => {
+        // 화면 로드 시 저장된 값이 있으면 가져오고, 없으면 10으로 초기화
+        const saved = localStorage.getItem('user_leverage');
+        return saved ? parseInt(saved, 10) : 10;
+    });
     const [showLev, setShowLev] = useState(false); 
 
     // [2] 코인 거래 성향 상태
     const [tendency, setTendency] = useState("공격형");
     const [showTendency, setShowTendency] = useState(false);
 
-    // ★ [3] 확인 팝업 관련 상태
-    const [showConfirm, setShowConfirm] = useState(false); // 팝업 노출 여부
-    const [confirmType, setConfirmType] = useState(null);  // 'leverage' or 'tendency'
-    const [pendingValue, setPendingValue] = useState(null); // 변경 대기 중인 값 (성향용)
-    
+    // [3] 자금 및 등급 상태
+    const [capital, setCapital] = useState(0);
+    const [tier, setTier] = useState("Demo");
+
+    // [4] 팝업 관련 상태
+    const [showConfirm, setShowConfirm] = useState(false); 
+    const [confirmType, setConfirmType] = useState(null);  
+    const [pendingValue, setPendingValue] = useState(null); 
+
+    // 유저 정보(등급, 자금, 성향) 가져오기 - DB 연동
+    useEffect(() => {
+        if (verify === "verified") {
+            const fetchUserData = async () => {
+                try {
+                    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    const response = await fetch('/api/get_user', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ timezone: timezone })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // 등급, 자금, 성향은 DB 데이터 사용
+                        if (data) {
+                            if (data.tier) setTier(data.tier);
+                            if (data.total_asset !== undefined) setCapital(data.total_asset);
+                            if (data.play) setTendency(data.play);
+                            
+                            // 레버리지는 DB에서 가져오지 않고 로컬 변수(state) 유지
+                        }
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch user data:", error);
+                }
+            };
+            fetchUserData();
+        }
+    }, [verify]);
+
     // 성향별 색상 매핑
     const getTendencyColor = (t) => {
         if (t === "공격형") return "text-red";
@@ -28,23 +68,48 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
         return "text-yellow"; 
     };
 
+    // DB 설정 저장 함수 (성향 저장용)
+    const saveUserSetting = async (key, value) => {
+        try {
+            await fetch('/api/userinfo_modify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    data: { [key]: value }
+                })
+            });
+        } catch (error) {
+            console.error(`Failed to save ${key}:`, error);
+        }
+    };
+
     // ★ 확인 팝업 - '예' 클릭 시 실행
     const handleConfirmYes = () => {
         if (confirmType === 'leverage') {
-            // 레버리지는 슬라이더로 이미 값이 바뀌어 있으므로 창만 닫음
             setShowLev(false);
+            
+            // [수정] 레버리지는 DB가 아닌 로컬 스토리지에 '변수'로 저장
+            localStorage.setItem('user_leverage', leverage);
+            console.log("Leverage saved locally:", leverage);
+
         } else if (confirmType === 'tendency') {
-            // 대기 중이던 성향 값으로 변경하고 창 닫기
             setTendency(pendingValue);
             setShowTendency(false);
+            
+            // 성향은 DB에 저장 (기존 유지)
+            saveUserSetting('play', pendingValue);
         }
-        setShowConfirm(false); // 확인 팝업 닫기
+        setShowConfirm(false); 
     };
 
     // ★ 확인 팝업 - '아니오' 클릭 시 실행
     const handleConfirmNo = () => {
+        if (confirmType === 'leverage') {
+            // 취소 시 저장된 값으로 되돌리기 (선택 사항)
+            const saved = localStorage.getItem('user_leverage');
+            setLeverage(saved ? parseInt(saved, 10) : 10);
+        }
         setShowConfirm(false);
-        // (선택 사항: 레버리지의 경우 취소 시 이전 값으로 되돌리는 로직을 추가할 수도 있음)
     };
 
     const handleLoginSuccess = (response) => {
@@ -84,8 +149,8 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                 <>
                 <div className="user-info-bar">
                     <div className="info-item">
-                    <span className="label">자금:</span>
-                    <span className="value">$10,000</span>
+                        <span className="label">자금:</span>
+                        <span className="value">${capital.toLocaleString()}</span>
                     </div>
 
                     {/* [1] 포지션 성향 (레버리지) */}
@@ -167,8 +232,8 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                     </div>
 
                     <div className="info-item">
-                    <span className="label">등급:</span>
-                    <span className="value badge-master">master</span>
+                        <span className="label">등급:</span>
+                        <span className="value badge-master">{tier}</span>
                     </div>
 
                     <span className="user-name"><strong>{Username}</strong>님</span>
@@ -214,11 +279,11 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                 <ProfileModal onClose={() => setShowProfileModal(false)} />
             )}
 
-            {/* ★ 추가: 포지션 변경 확인 팝업 */}
+            {/* 확인 팝업 */}
             {showConfirm && (
                 <div className="confirm-overlay">
                     <div className="confirm-box">
-                        <p className="confirm-msg">포지션을 변경하시겠습니까?</p>
+                        <p className="confirm-msg">설정을 변경하시겠습니까?</p>
                         <div className="confirm-btns">
                             <button className="btn-yes" onClick={handleConfirmYes}>예</button>
                             <button className="btn-no" onClick={handleConfirmNo}>아니오</button>
