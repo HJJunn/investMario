@@ -33,6 +33,49 @@ export default function Userinfo({ form, setForm }) {
     { label: "Bingx Secret", value: form.bingx_secret_key, status: form.bingx_key, keyName: "bingx_secret" },    
   ];
 
+  const validateFormForRun = () => {
+    // exchange
+    if (!form.exchange) {
+      alert("거래소를 선택해주세요.");
+      return false;
+    }
+
+    // model
+    if (!form.usemodel) {
+      alert("모델을 선택해주세요.");
+      return false;
+    }
+
+    // model key
+    if (form.usemodel.startsWith("GPT")) {
+      if (!form.gpt_key_value) {
+        alert("GPT API Key를 입력해주세요.");
+        return false;
+      }
+    }
+
+    // exchange key
+    if (form.exchange === "Upbit") {
+      if (!form.upbit_access_key || !form.upbit_secret_key) {
+        alert("Upbit Access / Secret Key를 모두 입력해주세요.");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handlePlayToggle = () => {
+    if (form.play) {
+      update("play", false);
+      return;
+    }
+
+    if (!validateFormForRun()) return;
+
+    update("play", true);
+  };
+
   return (
     <div className="user">
       <div className="user-information">
@@ -228,18 +271,19 @@ export default function Userinfo({ form, setForm }) {
         
         <div className="toggle-group">
           <button 
-          className={`toggle-btn ${form.play ? "on" : ""}`} 
-          onClick={() => update("play", !form.play)}
-          style={
-            {width:"100%",
-              marginBottom:"15px"
-            }
-          }
-          >
-            {form.play ? "Play ON" : "Play OFF"}
-        </button>
+              className={`toggle-btn ${form.play ? "on" : ""}`}
+              onClick={handlePlayToggle}
+              style={{ width: "100%", marginBottom: "15px" }}
+            >
+              {form.play ? "Play ON" : "Play OFF"}
+          </button>
 
-        <button className="save-btn" onClick={() => User_Infor_Modify(form)}>
+        <button 
+        className="save-btn" 
+        onClick={() => {
+          if (!validateFormForRun()) return;
+          User_Infor_Modify(form);
+        }}>
           Save
         </button>
       </div>

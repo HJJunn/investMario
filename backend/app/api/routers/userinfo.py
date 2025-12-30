@@ -94,8 +94,8 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
 
         # "phone": account.userinfo['phone'],
 
-        # "tier": account.money['tier'],
-        # "tier_time": account.money['tier_time'],
+        "tier": account.money['tier'],
+        "tier_time": account.money['tier_time'],
         "play": account.usercustom['play'],
         "ticker": account.usercustom['ticker'],
         "exchange": account.usercustom['exchange'],
@@ -104,7 +104,7 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
         "user_prompt": account.usercustom['user_prompt'],
         
         "grok_key": is_key_valid(account.key, 'grok'),
-        "gpt_key": is_key_valid(account.key, 'open'),
+        "gpt_key": is_key_valid(account.key, 'gpt'),
         # "gemini_key": is_key_valid(account.key, 'gemini'),
         "upbit_key": is_key_valid(account.key, 'upbit', subkeys=['access', 'secret']),
 
@@ -113,7 +113,8 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
         "bingx_key" : is_key_valid(account.key, "bingx", subkeys=['access', 'secret']),
 
         "grok_secret_key": safe_decrypt(account.key.get('grok', {}).get('secret', "")),
-        "gpt_secret_key": safe_decrypt(account.key.get('open', {}).get('secret', "")),
+        "gpt_secret_key": safe_decrypt(account.key.get('gpt', {}).get('secret', "")),
+
         # "gemini_secret_key": safe_decrypt(account.key.get('gemini', {}).get('secret', "")),
         "upbit_access_key": safe_decrypt(account.key.get('upbit', {}).get('access', "")),
         "upbit_secret_key": safe_decrypt(account.key.get('upbit', {}).get('secret', "")),

@@ -213,7 +213,7 @@ export default function TopStats({ isLogin, walletData, user_information }) {
         Object.keys(oc).forEach((coin) => {
             const amount = oc[coin] || 0;
             const price = currentPrice[coin] || 0;
-            newOwnerValue[coin] = amount * price;
+            newOwnerValue[coin] = Math.floor(amount * price);
         });
 
         prevPriceRef.current = currentPrice;
@@ -467,7 +467,6 @@ export default function TopStats({ isLogin, walletData, user_information }) {
         <div style={styles.historyBox}>
             <div style={styles.sectionHeader}>
                 <span>💰 보유 코인 (현물)</span>
-                <span style={{fontSize:'0.7rem', color:'var(--trade-subtext)'}}>{holdingData.length}건</span>
             </div>
             {isexchange ? (
                 <>
@@ -530,7 +529,6 @@ export default function TopStats({ isLogin, walletData, user_information }) {
         <div style={styles.historyBox}>
             <div style={styles.sectionHeader}>
                 <span>📋 거래 내역</span>
-                <span style={{fontSize:'0.7rem', color:'var(--trade-subtext)'}}>{historyData.length}건</span>
             </div>            
             <div style={styles.histHeader}>
                 <span>시간</span>
