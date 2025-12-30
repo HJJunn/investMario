@@ -1,22 +1,6 @@
 ﻿import transformUserData from "./transformUserData"
 import defaultallData from "./defaultallData"
 
-function data_sum(ex_data, new_data) {
-    const result = { ...ex_data };
-
-    for (const key in new_data) {
-        if (!result[key]) {
-            result[key] = { ...new_data[key] };
-        } else {
-            result[key].variable_data = [
-                ...result[key].variable_data,
-                ...new_data[key].variable_data
-            ];
-        }
-    }
-    return result;
-}
-
 // userid 대소문자 필히 확인할 것
 export default async function BotData() {
     const defaultAllData = defaultallData()
@@ -58,12 +42,12 @@ export default async function BotData() {
         }
 
         // 데이터 분리하기
-        const {chartData, walletData, analzeData} = transformUserData(data)
+        const walletData = transformUserData(data)
 
-        return { chartData, walletData, analzeData };
+        return walletData
 
     } catch (err) {
         console.error("데이터 가져오기 실패, 기본값 반환:", err);
-        return { chartData, walletData, analzeData };
+        return {walletData, analzeData };
     }
 }

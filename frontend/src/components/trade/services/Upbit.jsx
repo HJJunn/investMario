@@ -6,7 +6,7 @@ export default function useUpbitPrice() {
     const priceBuffer = useRef({});      // WebSocket 이벤트 임시 저장
     const updateTimer = useRef(null);    // 상태 갱신용 타이머
 
-    const coins = ['BTC', 'ETH', 'SOL', 'XRP', 'BCH'];
+    const coins = ['BTC', 'ETH', 'XRP', 'BCH'];
 
     useEffect(() => {
         const ws = new WebSocket("wss://api.upbit.com/websocket/v1");

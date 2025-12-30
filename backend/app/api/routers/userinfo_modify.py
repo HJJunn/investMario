@@ -19,8 +19,6 @@ class WalletRequest(BaseModel):
 # 유저 정보 수정 API
 @router.post("/userinfo_modify")
 async def user_data(request: Request, body: WalletRequest, db: Session = Depends(get_db)):
-    print(f"==== [DEBUG] Received Data: {body.data} ====")
-
     token = request.cookies.get("jwt")
     if not token:
         return JSONResponse(content={"data": "No token"}, status_code=401)
