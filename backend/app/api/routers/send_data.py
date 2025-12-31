@@ -61,18 +61,23 @@ async def datalist(request: Request, body:WalletRequest, db: Session = Depends(g
     coin_list = {}
     available_cash = 0
     trade_history = {}
+
     if account.usercustom['exchange'] != "":
-        exchange = account.usercustom['exchange']
-        ticker = account.usercustom['ticker']
+        try:
+            exchange = account.usercustom['exchange']
+            ticker = account.usercustom['ticker']
 
-        if exchange == "Upbit":
-            _upbit = exchange_information(access_key=account.key['upbit']['access'],
-                                        secret_key=account.key['upbit']['secret'],
-                                        ticker=ticker,
-                                        currency="KRW")
-            available_cash, coin_list, trade_history = _upbit
+            if exchange == "Upbit":
+                _upbit = exchange_information(access_key=account.key['upbit']['access'],
+                                            secret_key=account.key['upbit']['secret'],
+                                            ticker=ticker,
+                                            currency="KRW")
+                available_cash, coin_list, trade_history = _upbit
+        except Exception as e:
+            coin_list = {}
+            available_cash = 0
+            trade_history = {}
     
-
     variable_data = []
     # 정리
     for history in history_list:

@@ -73,12 +73,9 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
     except jwt.InvalidTokenError:
         return JSONResponse(content={"data" : "Nodata"})
     
-    
     account = db.query(UserInformation) \
         .filter(UserInformation.userid == id).first()
 
-    print(safe_decrypt(account.key['bingx']['access']))
-    print(safe_decrypt(account.key['bingx']['secret']))
     userinfo = {
         "username": account.userinfo['username'],
         "usemodel": account.userinfo['usemodel'],
