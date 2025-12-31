@@ -8,7 +8,6 @@ from app.api.config.config import GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SE
 app = FastAPI()
 
 class TokenJwt():
-    # load_dotenv(r".env")
 
     def __init__(self, authorize_code=None, token=None):
         self.authorize_code = authorize_code

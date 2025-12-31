@@ -4,8 +4,6 @@ from app.api.config.config import SessionLocal, UserInformation, TradingHistory,
 
 router = APIRouter()
 
-# load_dotenv(r"../.env")
-
 fernet_key = FERNET_KEY.encode() 
 cipher = Fernet(fernet_key)
 
@@ -74,7 +72,6 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
         return JSONResponse(content={"data" : "Nodata"})
     except jwt.InvalidTokenError:
         return JSONResponse(content={"data" : "Nodata"})
-    
     
     account = db.query(UserInformation) \
         .filter(UserInformation.userid == id).first()

@@ -105,8 +105,14 @@ export default function TopStats({ isLogin, walletData, user_information }) {
     useEffect(() => {
         setapikey(user_information['bingx_access_key'])
         setapisecert(user_information['bingx_secret_key'])
-        setIsExChange(!!user_information?.exchange);
-    },[user_information])
+
+        let isExChange = false;
+        if (walletData && Object.values(walletData).some(value => value > 0)) {
+            isExChange = true;
+        }
+
+        setIsExChange(isExChange);
+    },[walletData])
 
     // 승엽님 hook
     useEffect(() => {
@@ -134,7 +140,7 @@ export default function TopStats({ isLogin, walletData, user_information }) {
                                 amount: parseFloat(pos.positionAmt).toLocaleString(undefined, { maximumFractionDigits: 4 }), 
                                 pnl: `${unrealizedProfit >= 0 ? '+' : ''}${unrealizedProfit.toFixed(4)}`, 
                                 realizedPnl: `${realizedProfit >= 0 ? '+' : ''}${realizedProfit.toFixed(4)}`, 
-                                liquidationPrice: parseFloat(pos.liquidationPrice).toFixed(4), 
+                                liquidationPrice: parseFloat(pos.liquidationPrice).toFixed(1), 
                                 isWin: unrealizedProfit >= 0,
                                 isRealizedWin: realizedProfit >= 0,
                                 leverage: pos.leverage,
@@ -529,13 +535,16 @@ export default function TopStats({ isLogin, walletData, user_information }) {
         <div style={styles.historyBox}>
             <div style={styles.sectionHeader}>
                 <span>📋 거래 내역</span>
-            </div>            
+            </div>           
+            {isexchange ? (             
+                <>
             <div style={styles.histHeader}>
                 <span>시간</span>
                 <span>코인</span>
                 <span>타입</span> {/* 추가됨 */}
                 <span>수량</span>
             </div>
+         
             <div style={{overflowY:'auto', flex:1}} className="custom-scroll">
                 {historyData.map((trade, i) => (
                     <div key={i} style={
@@ -549,14 +558,14 @@ export default function TopStats({ isLogin, walletData, user_information }) {
                         </div>
 
                         {/* <span style={{color:'var(--trade-subtext)'}}>{trade.market}</span>
-                         */}
+                        */}
                         {/* ★ 구분 컬럼 (현물/선물) */}
                         {/* <div>
                             <span style={trade.category === '선물' ? styles.badgeFuture : styles.badgeSpot}>
                                 {trade.category}
                             </span>
                         </div>
-                         */}
+                        */}
 
                         <div>
                             <span style={
@@ -569,6 +578,21 @@ export default function TopStats({ isLogin, walletData, user_information }) {
                     </div>
                 ))}
             </div>
+            </>
+                        ): (
+                <div
+                    style={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--text-color)',
+                        fontSize: '1em',
+                    }}
+                >
+                    Information에서 거래소를 설정해 주세요.
+                </div>
+            )}
         </div>
     );
 
