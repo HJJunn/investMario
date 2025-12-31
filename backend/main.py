@@ -29,6 +29,7 @@ ENV = os.getenv("APP_ENV", "production")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://localhost:3500",
         "https://www.bottrader.shop",
         "https://bottrader.shop"],
     allow_credentials=True,
