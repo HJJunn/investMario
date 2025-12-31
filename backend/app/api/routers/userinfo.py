@@ -77,8 +77,8 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
     account = db.query(UserInformation) \
         .filter(UserInformation.userid == id).first()
 
-    print(account.key['bingx']['access'])
-    print(account.key['bingx']['secret'])
+    print(safe_decrypt(account.key['bingx']['access']))
+    print(safe_decrypt(account.key['bingx']['secret']))
     userinfo = {
         "username": account.userinfo['username'],
         "usemodel": account.userinfo['usemodel'],
