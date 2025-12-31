@@ -106,14 +106,13 @@ export default function TopStats({ isLogin, walletData, user_information }) {
         setapikey(user_information['bingx_access_key'])
         setapisecert(user_information['bingx_secret_key'])
 
-        
         let isExChange = false;
-        if (walletData && walletData.owner_coin && walletData.owner_coin.length > 0) {
+        if (walletData && Object.values(walletData).some(value => value > 0)) {
             isExChange = true;
         }
 
         setIsExChange(isExChange);
-    },[user_information])
+    },[walletData])
 
     // 승엽님 hook
     useEffect(() => {
