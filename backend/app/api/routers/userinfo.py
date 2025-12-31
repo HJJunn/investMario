@@ -4,8 +4,6 @@ from app.api.config.config import SessionLocal, UserInformation, TradingHistory,
 
 router = APIRouter()
 
-# load_dotenv(r"../.env")
-
 fernet_key = FERNET_KEY.encode() 
 cipher = Fernet(fernet_key)
 
@@ -79,6 +77,8 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
     account = db.query(UserInformation) \
         .filter(UserInformation.userid == id).first()
 
+    print(account.key['bingx']['access'])
+    print(account.key['bingx']['secret'])
     userinfo = {
         "username": account.userinfo['username'],
         "usemodel": account.userinfo['usemodel'],
