@@ -1,9 +1,7 @@
 // src/components/trade/TopStats.jsx
-
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-
 
 import useUpbitData from './services/Upbit'
 
@@ -12,9 +10,7 @@ const coinIcons = {
     BTC: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025",
     ETH: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025",
     XRP: "https://cryptologos.cc/logos/xrp-xrp-logo.png?v=025",
-    SOL: "https://cryptologos.cc/logos/solana-sol-logo.png?v=025",
-    DOGE: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025",
-    ADA: "https://cryptologos.cc/logos/cardano-ada-logo.png?v=025",
+    BCH: "https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png",
     USDT: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=025",
 };
 
@@ -89,30 +85,28 @@ async function fetchBingXPositions(API_KEY, API_SECRET) {
     return resp.data;
 }
 
-export default function TopStats({ isLogin, analzeData, walletData, user_information }) {
+export default function TopStats({ isLogin, walletData, user_information }) {
 
-    const [position, setPosition] = useState({})
-    const [owner_coin, setOwner_Coin] = useState({})
-
-    const [trade_coin, setTrade_Coin] = useState({})
-    const [_time, setTime] = useState("")
-
-    const API_KEY = user_information['bingx_access_key'];
-    const API_SECRET = user_information['bingx_secret_key'];
-  
-    const prevAnalzeRef = useRef(null);
     const prevWalletRef = useRef(null);
 
     const [positionData, setPositionData] = useState([]);
     const [loadingPositions, setLoadingPositions] = useState(true);
     const [positionError, setPositionError] = useState(null);
 
-    const [currentOwnerValue, setCurrentOwner] = useState({});
+    const [API_KEY, setapikey] = useState("")
+    const [API_SECRET, setapisecert] =  useState("")
+    const [isexchange, setIsExChange] = useState(false)
 
-
+    const [holdingData, setHoldingData] = useState([])
+    const [historyData, setHistoryData] = useState([])
     // Upbit Current Price Data
     const currentPrice = useUpbitData(walletData && Object.keys(walletData).length ? walletData : null);
 
+    useEffect(() => {
+        setapikey(user_information['bingx_access_key'])
+        setapisecert(user_information['bingx_secret_key'])
+        setIsExChange(!!user_information?.exchange);
+    },[user_information])
 
     // 승엽님 hook
     useEffect(() => {
@@ -172,102 +166,71 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
 
     }, [API_KEY, API_SECRET, isLogin]); // isLogin 상태가 변경될 때만 다시 실행
 
-    
-    useEffect(() => {
-        if (!analzeData) return;
-    
-        if (prevAnalzeRef.current &&
-            JSON.stringify(prevAnalzeRef.current) === JSON.stringify(analzeData)
-        ) {
-            return; // 완전히 같으면 아무 것도 안 함
-        }
-
-        const keys = Object.keys(analzeData);
-
-        keys.forEach(key => {
-            const value = analzeData[key];
-
-            setPosition(value.position[value.position.length - 1]);
-
-            const rawTime = value.time[value.time.length - 1];
-
-            const localTime = new Date(rawTime).toLocaleString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-
-            setTime(localTime);
-        });
-        prevAnalzeRef.current = analzeData;
-   
-    }, [analzeData]);
-
     // Ref로 호출 제한
     useEffect(() => {
         if (!walletData) return;
 
+        // 중복 호출 방지
         if (prevWalletRef.current &&
             JSON.stringify(prevWalletRef.current) === JSON.stringify(walletData)
-        ) {
-            return;
-        }
+        ) return;
 
-        const keys = Object.keys(walletData);
-
-        keys.forEach(key => {
-            const value = walletData[key];
-            setOwner_Coin(value.owner_coin[value.owner_coin.length-1]);
-
-            let current_owner_coin = value.owner_coin[value.owner_coin.length-1]
-            let pre_owner_coin = value.owner_coin[value.owner_coin.length-2]
-            
-            const coinDifference = {};
-            Object.keys(current_owner_coin).forEach((key) => {
-            coinDifference[key] =
-                Number((current_owner_coin[key] - pre_owner_coin[key]).toFixed(8));
-            });
-            setTrade_Coin(coinDifference);
-        });
         prevWalletRef.current = walletData;
-    
-    }, [walletData])
+
+        // walletData에서 직접 가져오기
+
+        const th = walletData.trade_history || {};
+        // 거래 내역
+        const formatLocalTime = (isoTime) => {
+            if (!isoTime) return "N/A";
+            const date = new Date(isoTime); // 자동으로 현지 시간 기준
+            const year = String(date.getFullYear()).slice(2); // 뒤 두 자리만
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 1~12
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        };
+        setHistoryData([
+            { time: formatLocalTime(th?.['BTC']?.created_at), coin: "BTC", type: th?.['BTC']?.side, qty: th?.['BTC']?.executed_volume || 0, isBuy: true },
+            { time: formatLocalTime(th?.['ETH']?.created_at), coin: "ETH", type: th?.['ETH']?.side, qty: th?.['ETH']?.executed_volume || 0, isBuy: false },
+            { time: formatLocalTime(th?.['XRP']?.created_at), coin: "XRP", type: th?.['XRP']?.side, qty: th?.['XRP']?.executed_volume || 0, isBuy: true },
+            { time: formatLocalTime(th?.['BCH']?.created_at), coin: "BCH", type: th?.['BCH']?.side, qty: th?.['BCH']?.executed_volume || 0, isBuy: false },
+        ]);
+
+    }, [walletData]);
 
     const prevPriceRef = useRef({});
     useEffect(() => {
-        if (!owner_coin || !currentPrice) return;
+        if (!currentPrice) return;
 
-        // 값이 실제로 달라졌을 때만 계산
-        if (JSON.stringify(prevPriceRef.current) !== JSON.stringify(currentPrice)) {
-            // 곱해서 평가금액 계산 (정수로)
-            const newOwnerValue = {};
-            Object.keys(owner_coin).forEach(coin => {
-                if (currentPrice[coin] !== undefined) {
-                    newOwnerValue[coin] = Math.floor(owner_coin[coin] * currentPrice[coin]);
-                }
-            });
+        const oc = walletData.owner_coin || {};
 
-            setCurrentOwner(newOwnerValue);
-            prevPriceRef.current = currentPrice;
-        }
-    }, [currentPrice, owner_coin]);
-    
-
-    useEffect(() => {
-        if (!position || !trade_coin) return;
-
-        const updatedTradeCoin = { ...trade_coin };
-
-        Object.keys(position).forEach((key) => {
-            if (position[key] === "sell" && trade_coin[key] === 0) {
-                updatedTradeCoin[key] = "최소";
-            }
+        // currentPrice 변경 시 ownerValue 계산
+        const newOwnerValue = {};
+        Object.keys(oc).forEach((coin) => {
+            const amount = oc[coin] || 0;
+            const price = currentPrice[coin] || 0;
+            newOwnerValue[coin] = Math.floor(amount * price);
         });
 
-        setTrade_Coin(updatedTradeCoin);
+        prevPriceRef.current = currentPrice;
 
-    }, [position]);
+        // 순서를 지정한 배열
+        const coinOrder = ["BTC", "ETH", "XRP", "BCH"];
+
+        // holdingData 업데이트
+        setHoldingData(
+            coinOrder.map((coin) => ({
+                coin,
+                amount: oc[coin] || 0,
+                value: newOwnerValue[coin] || 0,
+                isWin: coin === "BTC" || coin === "ETH", // 필요에 따라 변경
+            }))
+        );
+    }, [currentPrice, walletData]);
 
     // 1. 청산 현황
     const statsData = [
@@ -277,23 +240,7 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
         { label: "24시간 청산", short: "106.65M", long: "94.41M", total: "201.06M" },
     ];
 
-    // 3. [현물] 보유 코인 데이터
-    const holdingData = [
-        { coin: "BTC", amount: owner_coin['BCH'], roe: "+12.5%", value: currentOwnerValue.BTC, isWin: true },
-        { coin: "ETH", amount: owner_coin['ETH'], roe: "+5.2%", value: currentOwnerValue.ETH, isWin: true },
-        { coin: "XRP", amount: owner_coin['XRP'], roe: "-2.1%", value: currentOwnerValue.XRP, isWin: false },
-        { coin: "BCH", amount: owner_coin['BCH'], roe: "-2.1%", value: currentOwnerValue.BCH, isWin: false },
-        { coin: "SOL", amount: owner_coin['SOL'], roe: "-2.1%", value: currentOwnerValue.SOL, isWin: false },                
-    ];
 
-    // 4. 통합 거래 내역 (★ category 항목 추가됨)
-    const historyData = [
-        { time: _time, coin: "BTC", market: "KRW", category: "현물", type: position['BTC'], qty: trade_coin['BTC'], isBuy: true },
-        { time: _time, coin: "ETH", market: "KRW", category: "현물", type: position['ETH'], qty: trade_coin['ETH'], isBuy: false },
-        { time: _time, coin: "XRP", market: "KRW", category: "현물", type: position['XRP'], qty: trade_coin['XRP'], isBuy: true },
-        { time: _time, coin: "SOL", market: "KRW", category: "현물", type: position['SOL'], qty: trade_coin['SOL'], isBuy: true },
-        { time: _time, coin: "BCH", market: "KRW", category: "현물", type: position['BCH'], qty: trade_coin['BCH'], isBuy: false },
-    ];
 
     const styles = {
         container: {
@@ -409,11 +356,11 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
             backgroundColor: 'var(--trade-bg)', borderBottom: '1px solid var(--trade-border)',
             color: 'var(--trade-subtext)', textAlign: 'center', 
         },
-        // ★ 거래내역 헤더 (6개 컬럼으로 변경)
+        // ★ 거래내역 헤더 (6개 컬럼으로 변경) => 5개 컬럼으로
         histHeader: {
             display: 'grid',
-            // 시간 | 코인 | 마켓 | 구분 | 종류 | 수량
-            gridTemplateColumns: '0.7fr 0.8fr 0.6fr 0.6fr 0.6fr 0.8fr', 
+            // 시간 | 코인 | 종류 | 수량
+            gridTemplateColumns: '2fr 1fr 1fr 1.5fr', 
             padding: '6px 0', fontSize: '0.65rem', fontWeight: 'bold',
             backgroundColor: 'var(--trade-bg)', borderBottom: '1px solid var(--trade-border)',
             color: 'var(--trade-subtext)', textAlign: 'center', 
@@ -520,40 +467,60 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
         <div style={styles.historyBox}>
             <div style={styles.sectionHeader}>
                 <span>💰 보유 코인 (현물)</span>
-                <span style={{fontSize:'0.7rem', color:'var(--trade-subtext)'}}>{holdingData.length}건</span>
             </div>
-            <div style={styles.holdHeader}>
-                <span>코인</span>
-                <span>수량</span>
-                <span>평가금</span>
-            </div>
-            <div style={{overflowY:'auto', flex:1}} className="custom-scroll">
-                {holdingData.map((hold, i) => (
-                    <div key={i} style={{...styles.tableRow, gridTemplateColumns: '0.9fr 0.9fr 1.2fr'}}>
-                        <div style={styles.coinWrapper}>
-                            <img src={coinIcons[hold.coin]} alt="" style={styles.coinIcon} />
-                            <span>{hold.coin}</span>
-                        </div>
-                        <span style={{color:'var(--trade-text)'}}>{hold.amount}</span>
-                        <div className='won'
-                        style={
-                            {
-                                
-                                fontWeight:'bold',
-                                display:'flex',
-                                flexDirection:'row',
-                                justifyContent:'space-between',
-                                paddingRight:'30px',
-                                paddingLeft:'30px'       
-                            }
-                            }>
-
-                            <div>{Number(hold.value).toLocaleString()}</div>
-                            <div>{'\u20A9'}</div>                            
-                        </div>
+            {isexchange ? (
+                <>
+                    <div style={styles.holdHeader}>
+                        <span>코인</span>
+                        <span>수량</span>
+                        <span>평가금</span>
                     </div>
-                ))}
-            </div>
+
+                    <div style={{ overflowY: 'auto', flex: 1 }} className="custom-scroll">
+                        {holdingData.map((hold, i) => (
+                            <div
+                                key={i}
+                                style={{ ...styles.tableRow, gridTemplateColumns: '0.9fr 0.9fr 1.2fr' }}
+                            >
+                                <div style={styles.coinWrapper}>
+                                    <img src={coinIcons[hold.coin]} alt="" style={styles.coinIcon} />
+                                    <span>{hold.coin}</span>
+                                </div>
+
+                                <span style={{ color: 'var(--trade-text)' }}>{hold.amount}</span>
+
+                                <div
+                                    className="won"
+                                    style={{
+                                        fontWeight: 'bold',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        paddingRight: '30px',
+                                        paddingLeft: '30px',
+                                    }}
+                                >
+                                    <div>{Number(hold.value).toLocaleString()}</div>
+                                    <div>₩</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            ) : (
+                <div
+                    style={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--text-color)',
+                        fontSize: '1em',
+                    }}
+                >
+                    Information에서 거래소를 설정해 주세요.
+                </div>
+            )}
         </div>
     );
 
@@ -562,36 +529,42 @@ export default function TopStats({ isLogin, analzeData, walletData, user_informa
         <div style={styles.historyBox}>
             <div style={styles.sectionHeader}>
                 <span>📋 거래 내역</span>
-                <span style={{fontSize:'0.7rem', color:'var(--trade-subtext)'}}>{historyData.length}건</span>
-            </div>
+            </div>            
             <div style={styles.histHeader}>
                 <span>시간</span>
                 <span>코인</span>
-                <span>마켓</span>
-                <span>구분</span> {/* 추가됨 */}
-                <span>종류</span>
+                <span>타입</span> {/* 추가됨 */}
                 <span>수량</span>
             </div>
             <div style={{overflowY:'auto', flex:1}} className="custom-scroll">
                 {historyData.map((trade, i) => (
-                    <div key={i} style={{...styles.tableRow, gridTemplateColumns: '0.7fr 0.8fr 0.6fr 0.6fr 0.6fr 0.8fr'}}>
+                    <div key={i} style={
+                        {...styles.tableRow, 
+                        gridTemplateColumns: '2fr 1fr 1fr 1.5fr'}}>
                         <span style={{color:'var(--trade-subtext)'}}>{trade.time}</span>
+
                         <div style={styles.coinWrapper}>
                             <img src={coinIcons[trade.coin]} alt="" style={styles.coinIcon} />
                             <span>{trade.coin}</span>
                         </div>
-                        <span style={{color:'var(--trade-subtext)'}}>{trade.market}</span>
-                        
+
+                        {/* <span style={{color:'var(--trade-subtext)'}}>{trade.market}</span>
+                         */}
                         {/* ★ 구분 컬럼 (현물/선물) */}
-                        <div>
+                        {/* <div>
                             <span style={trade.category === '선물' ? styles.badgeFuture : styles.badgeSpot}>
                                 {trade.category}
                             </span>
                         </div>
-                        
+                         */}
+
                         <div>
-                            <span style={trade.type == "hold" ? styles.badgeLong : styles.badgeShort}>{trade.type}</span>
+                            <span style={
+                                trade.type == "bid" ? 
+                                styles.badgeLong : styles.badgeShort}>{trade.type}
+                            </span>
                         </div>
+                        
                         <span style={{color:'var(--trade-subtext)'}}>{trade.qty}</span>
                     </div>
                 ))}

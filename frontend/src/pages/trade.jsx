@@ -28,9 +28,7 @@ export default function TradePage({ darkMode, setDarkMode, verify, Username }) {
     const [viewMode, setViewMode] = useState("all");
     const [isChatOpen, setIsChatOpen] = useState(false); 
 
-    const [sender_chartData, setChartData] = useState([]);
     const [sender_walletData, setWalletData] = useState([]);
-    const [sender_analzeData, setAnalzeData] = useState([]);
 
     const [userinfo, setUserInfo] = useState({});
 
@@ -68,21 +66,16 @@ export default function TradePage({ darkMode, setDarkMode, verify, Username }) {
     },[])
     
     useEffect(() => {
-        const interval = setInterval(async () => {
-        const { chartData, walletData, analzeData } = await TradeData();
-        
-        if (JSON.stringify(chartData) !== JSON.stringify(sender_chartData)) {
-            setChartData(chartData);
-        }
-        if (JSON.stringify(walletData) !== JSON.stringify(sender_walletData)) {
-            setWalletData(walletData);
-        }
-        if (JSON.stringify(analzeData) !== JSON.stringify(sender_analzeData)) {
-            setAnalzeData(analzeData);
-        }
-        }, 1000);
 
-        return () => clearInterval(interval); 
+        const load_wallet = async () => {
+            const walletData = await TradeData();
+
+            if (JSON.stringify(walletData) !== JSON.stringify(sender_walletData)) {
+                setWalletData(walletData);
+            }
+        }
+
+        load_wallet()
     }, []);
     
     useEffect(() => {
@@ -144,11 +137,22 @@ export default function TradePage({ darkMode, setDarkMode, verify, Username }) {
     return (
         <div className="trade-container">
             <div className="area-header">
-                <Header darkMode={darkMode} setDarkMode={setDarkMode} isLogin={isLogin} verify = {verify} Username = {Username} />
+                <Header 
+                darkMode={darkMode} 
+                setDarkMode={setDarkMode} 
+                isLogin={isLogin} 
+                verify = {verify} 
+                Username = {Username} 
+                user_information={userinfo}
+                wallet_data={sender_walletData}
+                />
             </div>
 
             <div className="area-top-stats">
-                <TopStats isLogin={isLogin} analzeData={sender_analzeData} walletData = {sender_walletData} user_information={userinfo} />
+                <TopStats 
+                isLogin={isLogin} 
+                walletData = {sender_walletData} 
+                user_information={userinfo} />
             </div>
 
             <div className="area-main">

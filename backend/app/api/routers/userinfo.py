@@ -1,12 +1,12 @@
 from app.common.imports import *
 
-from app.api.config.config import SessionLocal, UserInformation, TradingHistory
+from app.api.config.config import SessionLocal, UserInformation, TradingHistory, FERNET_KEY
 
 router = APIRouter()
 
-load_dotenv(r"../.env")
+# load_dotenv(r"../.env")
 
-fernet_key = os.getenv("FERNET_KEY").encode() 
+fernet_key = FERNET_KEY.encode() 
 cipher = Fernet(fernet_key)
 
 def get_db():
@@ -82,13 +82,18 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
     userinfo = {
         "username": account.userinfo['username'],
         "usemodel": account.userinfo['usemodel'],
-        "colors": account.userinfo['colors'],
-        "logo": account.userinfo['logo'],
-        "post": account.userinfo['post'],
+
+        # "colors": account.userinfo['colors'],
+        # "logo": account.userinfo['logo'],
+        # "post": account.userinfo['post'],
         "email": account.userinfo['email'],
+
         "country": account.userinfo['country'],
-        "createdtime": account.userinfo['createdtime'],
-        "phone": account.userinfo['phone'],
+
+        # "createdtime": account.userinfo['createdtime'],
+
+        # "phone": account.userinfo['phone'],
+
         "tier": account.money['tier'],
         "tier_time": account.money['tier_time'],
         "play": account.usercustom['play'],
@@ -99,19 +104,22 @@ async def user_data(request: Request, body:WalletRequest, db: Session = Depends(
         "user_prompt": account.usercustom['user_prompt'],
         
         "grok_key": is_key_valid(account.key, 'grok'),
-        "gpt_key": is_key_valid(account.key, 'open'),
-        "gemini_key": is_key_valid(account.key, 'gemini'),
+        "gpt_key": is_key_valid(account.key, 'gpt'),
+        # "gemini_key": is_key_valid(account.key, 'gemini'),
         "upbit_key": is_key_valid(account.key, 'upbit', subkeys=['access', 'secret']),
-        "bithumb_key": is_key_valid(account.key, 'bithumb', subkeys=['access', 'secret']),
-        "bingx" : is_key_valid(account.key, "bingx", subkeys=['access', 'secret']),
+
+        # "bithumb_key": is_key_valid(account.key, 'bithumb', subkeys=['access', 'secret']),
+
+        "bingx_key" : is_key_valid(account.key, "bingx", subkeys=['access', 'secret']),
 
         "grok_secret_key": safe_decrypt(account.key.get('grok', {}).get('secret', "")),
-        "gpt_secret_key": safe_decrypt(account.key.get('open', {}).get('secret', "")),
-        "gemini_secret_key": safe_decrypt(account.key.get('gemini', {}).get('secret', "")),
+        "gpt_secret_key": safe_decrypt(account.key.get('gpt', {}).get('secret', "")),
+
+        # "gemini_secret_key": safe_decrypt(account.key.get('gemini', {}).get('secret', "")),
         "upbit_access_key": safe_decrypt(account.key.get('upbit', {}).get('access', "")),
         "upbit_secret_key": safe_decrypt(account.key.get('upbit', {}).get('secret', "")),
-        "bithumb_access_key": safe_decrypt(account.key.get('bithumb', {}).get('access', "")),
-        "bithumb_secret_key": safe_decrypt(account.key.get('bithumb', {}).get('secret', "")),
+        # "bithumb_access_key": safe_decrypt(account.key.get('bithumb', {}).get('access', "")),
+        # "bithumb_secret_key": safe_decrypt(account.key.get('bithumb', {}).get('secret', "")),
         "bingx_access_key" : safe_decrypt(account.key.get('bingx', {}).get('access', "")),
         "bingx_secret_key" : safe_decrypt(account.key.get('bingx', {}).get('secret', "")),
     }

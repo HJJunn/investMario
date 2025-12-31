@@ -9,11 +9,17 @@ Base = declarative_base()
 from sqlalchemy.orm import sessionmaker
 
 
-load_dotenv(r"../.env")
+# 배포
+# load_dotenv(r"../.env")
 
 GOOGLE_CLOUDE_KEY = os.getenv("GOOGLE_CLOUDE_KEY")
-print(GOOGLE_CLOUDE_KEY)
 GOOGLE_CLOUDE_IP = os.getenv("GOOGLE_CLOUDE_IP")
+FERNET_KEY = os.getenv("FERNET_KEY")
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
+GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
+GOOGLE_OAUTH_USER_CLIENT_ID = os.getenv("GOOGLE_OAUTH_USER_CLIENT_ID")
+GOOGLE_OAUTH_USER_CLIENT_PASSWORD = os.getenv("GOOGLE_OAUTH_USER_CLIENT_PASSWORD")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 DB_CONFIG = {
     "host" : GOOGLE_CLOUDE_IP,
@@ -55,6 +61,8 @@ class TradingHistory(Base):
     trade = Column(JSONB, comment="거래 정보")
 
     trade_fee = Column(Numeric, comment="총 거래 수수료")
+    
+    exchange = Column(Text, comment="진행 거래소")
 
 # 유저 정보
 class UserInformation(Base):

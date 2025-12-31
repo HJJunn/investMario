@@ -3,18 +3,12 @@ from app.common.imports import *
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
+from app.api.config.config import GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, REDIRECT_URI
+
 app = FastAPI()
 
-@app.get("/google-test")
-def google_test():
-    return {
-        "GOOGLE_CLIENT_ID": os.getenv("GOOGLE_OAUTH_USER_CLIENT_ID"),
-        "GOOGLE_CLIENT_SECRET": os.getenv("GOOGLE_OAUTH_USER_CLIENT_PASSWORD"),
-        "REDIRECT_URI": os.getenv("USER_REDIRECT_URI")
-    }
-
 class TokenJwt():
-    load_dotenv(r".env")
+    # load_dotenv(r".env")
 
     def __init__(self, authorize_code=None, token=None):
         self.authorize_code = authorize_code
@@ -22,9 +16,9 @@ class TokenJwt():
         self.ALGORITHM = "HS256"
         self.token = token
         
-        self.GOOGLE_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
-        self.GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
-        self.URI = os.getenv("REDIRECT_URI")
+        self.GOOGLE_CLIENT_ID = GOOGLE_OAUTH_CLIENT_ID
+        self.GOOGLE_CLIENT_SECRET = GOOGLE_OAUTH_CLIENT_SECRET
+        self.URI = REDIRECT_URI
         
     async def authorize_token(self):
         data_set={

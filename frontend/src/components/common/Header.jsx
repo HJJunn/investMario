@@ -5,9 +5,12 @@ import GoogleLogin from '../GoogleLogin/GoogleLogin.jsx';
 import ProfileModal from '../dashboard/ProfileModal.jsx';
 import { useState, useEffect } from 'react';
 
-export default function Header({ darkMode, setDarkMode, isLogin, verify, Username }) {
+export default function Header({ darkMode, setDarkMode, isLogin, verify, Username, user_information, wallet_data}) {
+
     const [showProfileModal, setShowProfileModal] = useState(false);
-     
+    
+    
+
     // [1] 레버리지 상태 (DB 대신 로컬 스토리지 사용)
     const [leverage, setLeverage] = useState(() => {
         // 화면 로드 시 저장된 값이 있으면 가져오고, 없으면 10으로 초기화
@@ -46,8 +49,6 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                         
                         // 등급, 자금, 성향은 DB 데이터 사용
                         if (data) {
-                            if (data.tier) setTier(data.tier);
-                            if (data.total_asset !== undefined) setCapital(data.total_asset);
                             if (data.play) setTendency(data.play);
                             
                             // 레버리지는 DB에서 가져오지 않고 로컬 변수(state) 유지
@@ -60,6 +61,15 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
             fetchUserData();
         }
     }, [verify]);
+
+    useEffect(() => {
+        if (wallet_data?.available_cash == null) return
+        setCapital(wallet_data.available_cash)
+    }, [wallet_data?.available_cash])
+
+    useEffect(() => {
+        setTier(user_information.tier)
+    }, [user_information])
 
     // 성향별 색상 매핑
     const getTendencyColor = (t) => {
@@ -149,12 +159,13 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
                 <>
                 <div className="user-info-bar">
                     <div className="info-item">
-                        <span className="label">자금:</span>
-                        <span className="value">${capital.toLocaleString()}</span>
+                        <span className="label">지갑 여유 자금:</span>
+                        <span className="value">{capital.toLocaleString()} 원</span>
                     </div>
-
                     {/* [1] 포지션 성향 (레버리지) */}
-                    <div className="info-item" style={{ position: 'relative' }}>
+                    <div className="info-item" style={{ 
+                        position: 'relative', 
+                        }}>
                     <span className="label">포지션 성향:</span>
                     <button
                         className="leverage-btn"
@@ -276,7 +287,7 @@ export default function Header({ darkMode, setDarkMode, isLogin, verify, Usernam
 
             {/* 프로필 모달 */}
             {showProfileModal && (
-                <ProfileModal onClose={() => setShowProfileModal(false)} />
+                <ProfileModal onClose={() => setShowProfileModal(false)} user_information={user_information}/>
             )}
 
             {/* 확인 팝업 */}
