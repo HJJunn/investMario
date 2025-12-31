@@ -1,12 +1,12 @@
 from app.common.imports import *
 
-from app.api.config.config import SessionLocal, UserInformation, TradingHistory
+from app.api.config.config import SessionLocal, UserInformation, TradingHistory, FERNET_KEY
 
 router = APIRouter()
 
-load_dotenv(r"../.env")
+# load_dotenv(r"../.env")
 
-fernet_key = os.getenv("FERNET_KEY").encode() 
+fernet_key = FERNET_KEY.encode() 
 cipher = Fernet(fernet_key)
 
 def get_db():

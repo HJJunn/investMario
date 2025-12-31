@@ -9,7 +9,8 @@ Base = declarative_base()
 from sqlalchemy.orm import sessionmaker
 
 
-load_dotenv(r"../.env")
+# 배포
+# load_dotenv(r"../.env")
 
 GOOGLE_CLOUDE_KEY = os.getenv("GOOGLE_CLOUDE_KEY")
 GOOGLE_CLOUDE_IP = os.getenv("GOOGLE_CLOUDE_IP")
@@ -18,6 +19,7 @@ GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 GOOGLE_OAUTH_USER_CLIENT_ID = os.getenv("GOOGLE_OAUTH_USER_CLIENT_ID")
 GOOGLE_OAUTH_USER_CLIENT_PASSWORD = os.getenv("GOOGLE_OAUTH_USER_CLIENT_PASSWORD")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 DB_CONFIG = {
     "host" : GOOGLE_CLOUDE_IP,
