@@ -5,6 +5,7 @@ from app.agent.tools_portfolio import *
 
 TOOL_REGISTRY = {
     "get_price": get_price,
+    "get_price_by_date": get_price_by_date,
     "get_24h_stats": get_24h_stats,
     "compare_symbols": compare_symbols,
     "get_top_movers": get_top_movers,
