@@ -55,32 +55,7 @@ class LLM:
         }
 llm = LLM()
 
-# class LLM:
-#     def chat(self, messages, tools=None, tool_choice="auto"):
-#         payload = {
-#             "model": "qwen-crypto",
-#             "messages": messages,
-#             "temperature": 0.7,
-#             "max_tokens": 512,
-#         }
 
-#         # 🔹 vLLM이 tools를 지원하지 않더라도
-#         # 에이전트 구조 유지를 위해 받아만 둠
-#         resp = requests.post(
-#             VLLM_URL,
-#             headers={"Content-Type": "application/json"},
-#             json=payload,
-#             timeout=120
-#         )
-#         resp.raise_for_status()
-
-#         data = resp.json()
-#         return {
-#             "message": {
-#                 "content": data["choices"][0]["message"]["content"]
-#             }
-#         }
-# llm = LLM()
 
 
 
