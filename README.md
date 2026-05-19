@@ -283,7 +283,7 @@ npx vite
 - Function Calling 기반 AI Agent 설계 및 구현
 - RAG 기반 뉴스 / 용어 검색 시스템 구축
 - LLM 파인튜닝 및 데이터셋 구축
-- 개인 Repo:[https://github.com/HJJunn/investMario_chatbot](https://github.com/HJJunn/investMario_chatbot)
+- 개인 Repo 👉 [https://github.com/HJJunn/investMario_chatbot](https://github.com/HJJunn/investMario_chatbot)
 
 
 
