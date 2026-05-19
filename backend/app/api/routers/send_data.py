@@ -1,7 +1,7 @@
 from app.common.imports import *
 
 from app.api.config.config import SessionLocal, UserInformation, TradingHistory
-
+from app.services.upbit_api import exchange_information
 
 access_logger = logging.getLogger("uvicorn.access")
 
@@ -41,8 +41,8 @@ async def datalist(request: Request, body:WalletRequest, db: Session = Depends(g
     except jwt.InvalidTokenError:
         return JSONResponse(content={"data" : "Nodata"})
 
+    
     data = {}
-
     history_list = db.query(TradingHistory) \
         .filter(TradingHistory.userid == id) \
         .order_by(TradingHistory.time.desc()) \
@@ -51,15 +51,33 @@ async def datalist(request: Request, body:WalletRequest, db: Session = Depends(g
     account = db.query(UserInformation) \
         .filter(UserInformation.userid == id).first()
 
-    key = account.userid
-
     static_data = {
         "username": account.userinfo['username'],
         "usemodel": account.userinfo['usemodel'],
-        "colors": account.userinfo['colors'],
-        "logo": account.userinfo['logo'],
+        # "colors": account.userinfo['colors'],
+        # "logo": account.userinfo['logo'],
     }
+    
+    coin_list = {}
+    available_cash = 0
+    trade_history = {}
 
+    if account.usercustom['exchange'] != "":
+        try:
+            exchange = account.usercustom['exchange']
+            ticker = account.usercustom['ticker']
+
+            if exchange == "Upbit":
+                _upbit = exchange_information(access_key=account.key['upbit']['access'],
+                                            secret_key=account.key['upbit']['secret'],
+                                            ticker=ticker,
+                                            currency="KRW")
+                available_cash, coin_list, trade_history = _upbit
+        except Exception as e:
+            coin_list = {}
+            available_cash = 0
+            trade_history = {}
+    
     variable_data = []
     # 정리
     for history in history_list:
@@ -73,9 +91,9 @@ async def datalist(request: Request, body:WalletRequest, db: Session = Depends(g
                 "time": time_for_save.isoformat(),
                 "position" : history.position,
                 "why" : history.why,
-                "owner_coin" : history.owner_coin,
-                "available_cash": int(history.available),
-                "total_asset": int(history.total_asset),
+                "owner_coin" : coin_list,
+                "available_cash": int(available_cash),
+                "trade_history" : trade_history
             })
 
     data = { "static_data" : static_data, "variable_data" : variable_data }

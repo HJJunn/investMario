@@ -1,6 +1,6 @@
 from app.common.imports import *
 
-from app.api.routers import login, send_data, userinfor, userinfo_modify, verfyjwt, logout
+from app.api.routers import login, send_data, userinfo_modify, verfyjwt, logout, userinfo
 from app.database.connection import get_connection
 from app.api.config.config import Base, engine
 from app.api.routers import agent
@@ -29,14 +29,16 @@ ENV = os.getenv("APP_ENV", "production")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3500"],
+        "http://localhost:3500",
+        "https://www.bottrader.shop",
+        "https://bottrader.shop"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-app.include_router(userinfor.router, prefix="/api")
+app.include_router(userinfo.router, prefix="/api")
 app.include_router(userinfo_modify.router, prefix="/api")
 app.include_router(login.router, prefix="/api")
 app.include_router(send_data.router, prefix="/api")

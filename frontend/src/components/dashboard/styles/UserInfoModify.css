@@ -1,0 +1,188 @@
+﻿.user {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-information {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.user-information h2 {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+/* form group */
+.form-group {
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  /* font-weight: bold;  <-- 제거: 굵기 통일 (일반 텍스트) */
+  font-size: 1em;     /* <-- 수정: 0.9em -> 1em (크기 통일) */
+  display: block;
+}
+
+/* input + select 기본 */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: var(--bg-color, #fff);
+  color: var(--text-color, #333);
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #666;
+  outline: none;
+}
+
+/* Trading Fee : input + % 단위 */
+.input-with-unit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-with-unit input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: var(--bg-color, #fff);
+  color: var(--text-color, #333);
+  font-size: 1em;
+}
+
+.input-with-unit input:focus {
+  border-color: #666;
+  outline: none;
+}
+
+.input-with-unit span {
+  font-weight: bold;
+  font-size: 1em;
+  color: var(--text-color, #333);
+}
+
+/* toggle 버튼 */
+.toggle-group {
+  margin-bottom: 20px;
+}
+
+/* toggle-group 내의 label도 스타일 통일을 위해 추가 가능 (선택 사항) */
+.toggle-group label {
+  margin-bottom: 6px;
+  font-size: 1em;
+  display: block;
+}
+
+.toggle-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  color: #555; 
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.95em;
+}
+
+/* play 토글 버튼 */
+.toggle-btn.on {
+  background: linear-gradient(to bottom, #97b8fc 0%, #6a93e0 100%);
+  border: 1px solid #7fa4f8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.6);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.on:hover {
+  background: linear-gradient(to bottom, #a3c0ff 0%, #7b9eef 100%);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.ticker-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* 키 존재 여부 버튼 (옵션) */
+.key-toggle {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  background-color: #f0f0f0;
+  color: #555;
+  cursor: default;
+  font-size: 0.9em;
+}
+
+.key-toggle.on {
+  background-color: #4a76e8;
+  color: white;
+  border-color: #4a76e8;
+}
+
+.key-form{
+  position: relative;
+}
+
+.ticker-form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.user-prompt {
+  width: 100%;
+  height: 300px;
+  resize: none;
+  border-radius: 15px;
+  padding: 15px;
+
+  border: 1px solid #ccc;
+  background-color: var(--bg-color, #fff);
+  color: var(--text-color, #333);
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.user-prompt:focus {
+  border-color: #666;
+  outline: none;
+}
+
+/* save button */
+.save-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: #4a76e8;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.save-btn:hover {
+  background-color: #3b62c2;
+}

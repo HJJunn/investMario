@@ -1,10 +1,8 @@
 from app.common.imports import *
 
-from app.api.config.config import SessionLocal, UserInformation, TradingHistory
+from app.api.config.config import SessionLocal, UserInformation, TradingHistory, FERNET_KEY
 
-load_dotenv(r"../.env")
-
-fernet_key = os.getenv("FERNET_KEY").encode() 
+fernet_key = FERNET_KEY.encode() 
 cipher = Fernet(fernet_key)
 
 class DBController():
@@ -23,9 +21,9 @@ class DBController():
                 userinfo = {
                     "username" : self.username,
                     "usemodel" : "",
-                    "colors" : "",
-                    "logo" : "",
-                    "phone" :"",
+                    # "colors" : "",
+                    # "logo" : "",
+                    # "phone" :"",
                     "email" : self.email,
                     "post" : "",
                     "country" : "",
@@ -34,14 +32,14 @@ class DBController():
 
                 usercustom = {
                     "prompt_style" : "",
-                    "interval" : 0,
+                    "interval" : 14400,
                     "play" : "",
                     "user_prompt" : "",
                     "ticker" : {
                         "BTC" : False, 
                         "ETH" : False, 
                         "BCH" : False,
-                        "SOL" : False,
+                        # "SOL" : False,
                         "XRP" : False
                         },
                     "trading_fee" : "",
@@ -49,8 +47,8 @@ class DBController():
                 },
             
                 money = {
-                    "tier" : "Demo",
-                    "tier_time" : "",                    
+                    "tier" : "Master",
+                    "tier_time" : 365,                    
                 },
 
                 key = {
@@ -58,10 +56,10 @@ class DBController():
                         "access" : "",
                         "secret" : ""
                     },
-                    "bithumb" : {
-                        "access" : "",
-                        "secret" : ""                     
-                    },
+                    # "bithumb" : {
+                    #     "access" : "",
+                    #     "secret" : ""                     
+                    # },
                     "bingx" : {
                         "access" : "",
                         "secret" : ""                     
@@ -69,15 +67,15 @@ class DBController():
                     "gpt" : {
                         "secret" : ""
                     },
-                    "gemini" : {
-                        "secret" : ""
-                    },
+                    # "gemini" : {
+                    #     "secret" : ""
+                    # },
                     "grok" : {
                         "secret" : ""
                     },
-                    "claude" : {
-                        "secret" : ""
-                    }
+                    # "claude" : {
+                    #     "secret" : ""
+                    # }
                 },         
             )
 
@@ -97,15 +95,15 @@ class DBController():
         try:
             trade = TradingHistory(
                 userid = self.userid,
-                trade_number = 0,
-                time = datetime.utcnow().isoformat(),
-                position = {},
-                why = {},
-                owner_coin = {},
-                average = {},
-                trade = {},
-                total_asset = 0,
-                available = 0
+                trade_number = 0, # 트레이드 넘버
+                time = datetime.utcnow().isoformat(), # 타임
+                position = {}, # 포지션
+                why = {}, # 산 이유
+                owner_coin = {}, # 소유코인
+                average = {}, # 평단가
+                trade = {}, # 트레이드 이력
+                total_asset = 0, # 전체
+                available = 0 # 여유자금
             )
 
             db.add(trade)
@@ -135,27 +133,31 @@ class DBController():
             existing_money = user.money or {}
             existing_key = user.key or {}
 
-            # --- 키 암호화 함수 ---
+            # --- 키 암호화 함수 수정 ---
             def encrypt_key(new_value, existing_value):
+                # 빈 문자열("")이 들어오면 키를 삭제(빈 값으로 설정)
+                if new_value == "":
+                    return ""
+                # 값이 있으면 암호화, 없으면(None) 기존 값 유지
                 return cipher.encrypt(new_value.encode()).decode() if new_value else existing_value or ""
 
-            # --- 키 업데이트 (값이 있을 때만 덮어쓰기) ---
+            # --- 키 업데이트 ---
             user.key = {
                 "upbit": {
                     "access": encrypt_key(update_data.get('upbit_access_key'), existing_key.get('upbit', {}).get('access')),
                     "secret": encrypt_key(update_data.get('upbit_secret_key'), existing_key.get('upbit', {}).get('secret'))
                 },
-                "bithumb": {
-                    "access": encrypt_key(update_data.get('bithumb_access_key'), existing_key.get('bithumb', {}).get('access')),
-                    "secret": encrypt_key(update_data.get('bithumb_secret_key'), existing_key.get('bithumb', {}).get('secret'))
-                },
+                # "bithumb": {
+                #     "access": encrypt_key(update_data.get('bithumb_access_key'), existing_key.get('bithumb', {}).get('access')),
+                #     "secret": encrypt_key(update_data.get('bithumb_secret_key'), existing_key.get('bithumb', {}).get('secret'))
+                # },
                 "bingx" : {
                     "access": encrypt_key(update_data.get('bingx_access_key'), existing_key.get('bingx', {}).get('access')),
                     "secret": encrypt_key(update_data.get('bingx_secret_key'), existing_key.get('bingx', {}).get('secret'))
                 },
-                "gemini": {"secret": encrypt_key(update_data.get('gemini_key_value'), existing_key.get('gemini', {}).get('secret'))},
+                # "gemini": {"secret": encrypt_key(update_data.get('gemini_key_value'), existing_key.get('gemini', {}).get('secret'))},
                 "grok": {"secret": encrypt_key(update_data.get('grok_key_value'), existing_key.get('grok', {}).get('secret'))},
-                "claude": {"secret": existing_key.get('claude', {}).get('secret', '')},
+                # "claude": {"secret": existing_key.get('claude', {}).get('secret', '')},
                 "gpt": {"secret": encrypt_key(update_data.get('gpt_key_value'), existing_key.get('gpt', {}).get('secret'))}
             }
 

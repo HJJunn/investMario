@@ -5,8 +5,6 @@ import Trade from './pages/trade.jsx'
 
 import Home from './pages/home.jsx'
 
-import Day from './pages/day/DAY.jsx'
-
 import { useState, useEffect, useNavigate } from "react";
 
 import { getDB } from "./components/common/OpenDB.jsx"
@@ -88,7 +86,6 @@ function App() {
                         element={<Trade darkMode={darkMode} setDarkMode={setDarkMode} verify = {verify} Username = {name} />} 
                     />
                     <Route path="/oauth/callback" element={<GoogleRedirect />} />
-                    <Route path="/day" element={<Day />} />
                 </Routes>
             </BrowserRouter>
         </>
