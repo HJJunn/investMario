@@ -142,24 +142,38 @@ TradingView 차트를 연동하여:
 
 ```bash
 InvestMario/
+├── backend/                     # FastAPI 백엔드
+│   ├── main.py                  # 서버 진입점
+│   ├── requirements.txt
+│   ├── app/
+│   │   ├── agent/               # AI 에이전트 (LLM, Tools, Agent Runner)
+│   │   ├── api/routers/         # API 엔드포인트
+│   │   ├── services/            # 외부 API (Upbit, JWT)
+│   │   ├── auth/                # 인증 (JWT)
+│   │   ├── database/            # DB 연결
+│   │   ├── embeddings.py        # RAG 임베딩
+│   │   └── common/              # 공통 유틸리티
+│   ├── crypto_news_db/          # 뉴스 벡터DB (FAISS)
+│   └── crypto_term_db/          # 용어 벡터DB (FAISS)
 │
-├── 📂 backend/                    # FastAPI Backend
-│   ├── main.py                    # 메인 API 서버
-│   ├── trading/                   # 자동매매 로직
-│   ├── rag/                       # 뉴스 및 용어 RAG
-│   ├── auth/                      # JWT / OAuth 인증
-│   ├── db/                        # Database 관리
-│   └── requirements.txt
-│
-├── 📂 frontend/                   # React Frontend
+├── frontend/                    # React + Vite 프론트엔드
 │   ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── vite.config.js
+│   │   ├── pages/               # 홈, 대시보드, 거래, DAY 페이지
+│   │   ├── components/          # Header, Login, ChatBot, 거래 컴포넌트
+│   │   ├── services/            # API 호출, WebSocket, 데이터 처리
+│   │   ├── assets/              # 이미지, 폰트
+│   │   ├── styles/              # CSS (페이지별, 컴포넌트별)
+│   │   ├── App.jsx & index.jsx
+│   │   └── main.jsx
+│   ├── public/                  # 정적 자산
+│   ├── package.json
+│   ├── vite.config.js
+│   └── .env.development/production
 │
-└── README.md
+├── README.md                    # 프로젝트 설명
+├── package-lock.json            # 의존성 잠금
+└── command.ps1                  # 실행 스크립트
 ```
-
 ---
 
 # 📈 Main Functions
