@@ -162,24 +162,6 @@ InvestMario/
 
 ---
 
-# 🧠 AI Trading Workflow
-
-```text
-[시장 데이터 수집]
-        ↓
-[뉴스 및 용어 검색]
-        ↓
-[RAG 검색]
-        ↓
-[LLM 시장 분석]
-        ↓
-[매매 전략 생성]
-        ↓
-[거래소 API 주문 실행]
-```
-
----
-
 # 📈 Main Functions
 
 ## 📌 뉴스 기반 시장 분석
@@ -199,8 +181,8 @@ InvestMario/
 ## 📌 Function Calling 기반 Agent
 - 뉴스 검색 함수 호출
 - 용어 검색 함수 호출
-- 거래 함수 호출
-- 시장 분석 함수 호출
+- 개인 포트폴리오 함수 호출
+- 시장 데이터 함수 호출
 
 LLM이 직접 필요한 기능을 선택하여 실행하는 Agent 구조로 구현했습니다.
 
@@ -281,26 +263,12 @@ cd frontend
 npx vite
 ```
 
----
-
-# 📊 Dashboard
-
-### 지원 기능
-- 실시간 코인 시세
-- 포트폴리오 현황
-- 거래 내역
-- 수익률 분석
-- TradingView 차트
 
 # 👨‍💻 My Role
 
 - Function Calling 기반 AI Agent 설계 및 구현
 - RAG 기반 뉴스 / 용어 검색 시스템 구축
-- Upbit / BingX 거래소 API 연동
-- LLM 기반 시장 분석 로직 개발
-- FastAPI 기반 백엔드 개발
-- TradingView 기반 실시간 대시보드 연동
-- 개인 Repo:[https://github.com/HJJunn/investMario_](https://github.com/HJJunn/investMario_chatbot)
+- 개인 Repo:[https://github.com/HJJunn/investMario_chatbot](https://github.com/HJJunn/investMario_chatbot)
 
 
 
