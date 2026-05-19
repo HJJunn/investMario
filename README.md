@@ -292,6 +292,16 @@ npx vite
 - 수익률 분석
 - TradingView 차트
 
+# 👨‍💻 My Role
+
+- Function Calling 기반 AI Agent 설계 및 구현
+- RAG 기반 뉴스 / 용어 검색 시스템 구축
+- Upbit / BingX 거래소 API 연동
+- LLM 기반 시장 분석 로직 개발
+- FastAPI 기반 백엔드 개발
+- TradingView 기반 실시간 대시보드 연동
+- 개인 Repo:[https://github.com/HJJunn/investMario_](https://github.com/HJJunn/investMario_chatbot)
+
 
 
 
